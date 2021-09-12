@@ -246,7 +246,6 @@ const Shorty = () => {
   const [displayError, setDisplayError] = useState(false)
   const [copied, setCopied] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [tabs, setTabs] = useState(0)
 
   const updateInput = (e) => {
     setKeyword(e.target.value)
@@ -286,10 +285,8 @@ const Shorty = () => {
         const links = {
             originalLink:data.result["original_link"],
             shortLink:data.result["full_short_link2"],
-            id:tabs
         };
         setLists(lists => ([...lists,links]));
-        setTabs(tabs+1);
       } catch (error) {
         console.log(error)
       }
@@ -325,7 +322,7 @@ const Shorty = () => {
       </StyledInput>
       {lists.length >0 ? (
           lists.map((link, index) => (
-              <StyledLink key={link.id} >
+              <StyledLink key={index} >
                   <h3 className='initial-link'>{link.originalLink}</h3>
                   <div className='separator'></div>
                         <div className='link-button'>
@@ -338,20 +335,6 @@ const Shorty = () => {
                     </StyledLink>
                 ))
             ):null }
-          
-        
-          {/* <h3 className='initial-link'>{ogLink}</h3>
-          <div className='separator'></div>
-          <div className='link-button'>
-            <h3 className='new-link' id='generated-link'>
-              {short}
-            </h3>
-            <button onClick={copyClick} className={copied ? 'copied' : null}>
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
-          </div>
-        </StyledLink> 
-        ): null }  */}
     </StyledContainer>
   )
 }
