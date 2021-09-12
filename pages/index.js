@@ -4,7 +4,6 @@ import styled from "styled-components"
 import HeaderSection from './mid';
 import Navbar from './navbar';
 import Footer from './footer';
-import Shorty from './short';
 import Advance from './midTwo';
 //import Nav from "./navbar";
 
