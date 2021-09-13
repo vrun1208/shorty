@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Shorty from './short'
 
 const StyledAdvancedSection = styled.section`
   background-color: #f0f1f6;
@@ -110,6 +111,7 @@ const StyledBackgroundLine = styled.div`
 const Advance = () => {
   return (
     <StyledAdvancedSection>
+        <Shorty />   
       <StyledTopSection>
         <h2>Advanced Statistics</h2>
         <p>

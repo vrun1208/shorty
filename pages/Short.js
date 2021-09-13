@@ -1,0 +1,301 @@
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import formMobileBackground from '/images/bg-shorten-mobile.svg'
+import formDesktopBackground from '/images/bg-shorten-desktop.svg'
+
+const StyledContainer = styled.section`
+  width: 100%;
+  height: auto;
+  position: relative;
+  bottom: 75px;
+  .red-border {
+    input[type='text'] {
+      border: 3px solid #f46262;
+    }
+  }
+`
+
+const StyledInput = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0.5em 1.5em;
+  width: clamp(5em, 90%, 1400px);
+  background-color: #3b3054;
+  background-image: url(${formMobileBackground});
+  background-repeat: no-repeat;
+  background-position: top right;
+  border-radius: 0.8em;
+  @media screen and (min-width: 780px) {
+    top: 4rem;
+    padding: 2em;
+    width: clamp(730px, 70%, 90em);
+    background-image: url(${formDesktopBackground});
+    background-position: center;
+    background-size: cover;
+  }
+`
+
+const StyledInputForm = styled.form`
+  user-select: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1em 0;
+  input[type='text'] {
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.4em;
+    border-radius: 0.4em;
+    margin: 0 0 0.5em 0;
+    padding: 0.8em;
+    border: none;
+    overflow: hidden;
+    border: 3px solid transparent;
+    transition: border 200ms;
+    ::placeholder {
+      user-select: none;
+      color: #bfbfbf;
+    }
+  }
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    width: 100%;
+    min-height: 50px;
+    border: none;
+    background-color: #2acfcf;
+    padding: 0.8em;
+    margin: 0.5em 0 0 0;
+    border-radius: 0.4em;
+    transition: background-color 300ms;
+    &:active {
+      background-color: #9e9aa7;
+    }
+    @media (hover: hover) {
+      &:hover {
+        cursor: pointer;
+        background-color: #bfbfbf;
+        transition: background-color 300ms;
+      }
+      &:active {
+        background-color: #9e9aa7;
+      }
+    }
+  }
+  
+  @media screen and (min-width: 780px) {
+    padding: 0;
+    flex-direction: row;
+    input[type='text'] {
+      margin: 0 0.5em 0 0;
+      flex: 5;
+    }
+    button {
+      margin: 0 0 0 0.5em;
+      flex: 1;
+      &:hover {
+        background-color: #2acfcf;
+        transition: background-color 200ms;
+      }
+    }
+  }
+`
+
+const StyledLink = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.4em;
+  text-align: center;
+  width: clamp(5em, 90%, 1400px);
+  margin: 1em auto 0.5em auto;
+  background-color: #fff;
+  padding: 0 0 0.5em 0;
+  h3 {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    border: none;
+    background-color: #2acfcf;
+    padding: 0.4em 2em;
+    margin: 0.5em;
+    border-radius: 0.5em;
+    transition: background-color 300ms, transform 200ms;
+    width: clamp(8em, 80%, 25em);
+    height: 3em;
+    &:active {
+      background-color: #2acfcf;
+    }
+    @media (hover: hover) {
+      &:hover {
+        cursor: pointer;
+        background-color: #bfbfbf;
+        transition: background-color 300ms;
+      }
+      &:active {
+        background-color: #2acfcf;
+      }
+    }
+  }
+  .link-button {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  .initial-link {
+    text-align: center;
+    margin: 1em auto;
+    flex: 2;
+    padding: 0 2em;
+    overflow: hidden;
+    width: clamp(10ch, 100%, 80ch);
+    color: #232127;
+  }
+  .new-link {
+    color: #2acfcf;
+    text-align: left;
+    margin: 1em;
+  }
+  
+  .copied {
+    background-color: #232127;
+    user-select: none;
+  }
+  @media screen and (min-width: 780px) {
+    width: clamp(730px, 70%, 90em);
+    flex-direction: row;
+    padding: 0.8em 1em;
+    button {
+      margin: 0 1em;
+      width: clamp(8em, 90%, 10em);
+    }
+    .new-link {
+      margin: 0 1em;
+    }
+    .link-button {
+      flex-direction: row;
+    }
+    .initial-link {
+      text-align: left;
+      margin: 0;
+    }
+  }
+`
+
+const Shorty = () => {
+  let [keyword, setKeyword] = useState('')
+  let [short, setShort] = useState('')
+  const [lists, setLists] = useState([])
+  const [ogLink, setOgLink] = useState('')
+  const [displayError, setDisplayError] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const updateInput = (e) => {
+    setKeyword(e.target.value)
+  }
+
+  const copyClick = () => {
+    navigator.clipboard.writeText(short)
+    setCopied(true)
+  }
+
+  const showError = () => {
+    setDisplayError(true)
+    setTimeout(function () {
+      setDisplayError(false)
+    }, 2000)
+  }
+
+  /*const succesfulCall = (data) => {
+      setTabs(true)
+    setOgLink(keyword)
+    setShort(data.result.full_short_link2)
+  }*/
+
+  const shortenLink = async (e) => {
+    e.preventDefault()
+    if (keyword.length === 0) {
+      setErrorMessage('Please add a link')
+      showError()
+    } else {
+      try {
+        const response = await fetch(
+          `https://api.shrtco.de/v2/shorten?url=${keyword}`
+        )
+        const data = await response.json()
+        const links = {
+            originalLink:data.result["original_link"],
+            shortLink:data.result["full_short_link2"],
+        };
+        setLists(lists => ([...lists,links]));
+      } catch (error) {
+        console.log(error)
+      }
+      setKeyword('')
+    }
+  }
+
+
+  return (
+    <StyledContainer>
+      <StyledInput className={displayError ? 'red-border' : null}>
+        <StyledInputForm onSubmit={shortenLink}>
+          <input
+            type='text'
+            aria-label='initial link to shorten'
+            id='longUrl'
+            name='longUrl'
+            //onChange={updateInput}
+            //value={keyword}
+            placeholder='Shorten a link here...'
+          />
+          <button
+            type='button'
+            //onClick={shortenLink}
+            id='shorten-btn'>
+                Shorten It!  
+          </button>
+        </StyledInputForm>
+      </StyledInput>
+      {lists.length >0 ? (
+          lists.map((link, index) => (
+              <StyledLink key={index} >
+                  <h3 className='initial-link'>{link.originalLink}</h3>
+                  <div className='separator'></div>
+                        <div className='link-button'>
+                              <h3 className='new-link' id='generated-link'>
+                                  {link.shortLink}</h3>
+                                   <button onClick={copyClick} className={copied ? 'copied' : null}>
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+                        </div>
+                    </StyledLink>
+                ))
+            ):null }
+    </StyledContainer>
+  )
+}
+
+export default Shorty
