@@ -94,6 +94,16 @@ const StyledInputForm = styled.form`
       }
     }
   }
+  #error-message {
+    color: hsl(0, 87%, 67%);
+    font-weight: 500;
+    font-style: inherit;
+    max-height: 0px;
+    min-height: 0px;
+    opacity: 0;
+    transition: opacity 350ms ease-in-out, min-height 400ms ease-in-out,
+      max-height 400ms ease-in-out;
+  }
   
   @media screen and (min-width: 780px) {
     padding: 0;
@@ -109,6 +119,14 @@ const StyledInputForm = styled.form`
         background-color: #2acfcf;
         transition: background-color 200ms;
       }
+    }
+    #error-message {
+      position: absolute;
+      bottom: -32px;
+      transition: opacity 350ms ease-in-out, min-height 400ms ease-in-out,
+        max-height 400ms ease-in-out;
+      min-height: 25px;
+      max-height: 25px;
     }
   }
 `
@@ -204,22 +222,21 @@ const StyledLink = styled.div`
 `
 
 const Shorty = () => {
-  let [keyword, setKeyword] = useState('')
-  let [short, setShort] = useState('')
-  const [lists, setLists] = useState([])
-  const [ogLink, setOgLink] = useState('')
-  const [displayError, setDisplayError] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+    const [keyword, setKeyword] = useState('');
+    const [list, setList] = useState([]);
+    const [id, setId] = useState(0)
+    const [displayError, setDisplayError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
+    //const [iscopy, setIscopy] = useState(false)
 
-  const updateInput = (e) => {
+  const userInput = (e) => {
     setKeyword(e.target.value)
   }
 
-  const copyClick = () => {
-    navigator.clipboard.writeText(short)
-    setCopied(true)
-  }
+//   const copyClick = () => {
+//     navigator.clipboard.writeText(short)
+//     setCopied(true)
+//   }
 
   const showError = () => {
     setDisplayError(true)
@@ -239,21 +256,29 @@ const Shorty = () => {
     if (keyword.length === 0) {
       setErrorMessage('Please add a link')
       showError()
-    } else {
-      try {
-        const response = await fetch(
-          `https://api.shrtco.de/v2/shorten?url=${keyword}`
-        )
-        const data = await response.json()
-        const links = {
-            originalLink:data.result["original_link"],
-            shortLink:data.result["full_short_link2"],
-        };
-        setLists(lists => ([...lists,links]));
-      } catch (error) {
-        console.log(error)
-      }
-      setKeyword('')
+    } else{
+        console.log("hello")
+        try{
+            const res = await fetch(
+            `https://api.shrtco.de/v2/shorten?url=${keyword}`
+            )
+            const data = await res.json();
+            //console.log(data.result);
+            const lists = {
+                longUrl:data.result["original_link"],
+                shortUrl:data.result["full_short_link2"],
+                copied:false,
+                num: id
+            }
+            setId(id => (id+ 1));
+            setList(list=>([...list,lists]));
+        }
+        catch(error){
+            console.log("Something went wrong!", error)
+            setErrorMessage("Something went wrong!")
+            showError();
+        }
+        setKeyword('')
     }
   }
 
@@ -264,36 +289,39 @@ const Shorty = () => {
         <StyledInputForm onSubmit={shortenLink}>
           <input
             type='text'
-            aria-label='initial link to shorten'
-            id='longUrl'
             name='longUrl'
-            //onChange={updateInput}
-            //value={keyword}
+            onChange={userInput}
+            value={keyword}
             placeholder='Shorten a link here...'
           />
-          <button
-            type='button'
-            //onClick={shortenLink}
-            id='shorten-btn'>
+           <h4 id='error-message' className={displayError ? 'visible' : null}>
+            {errorMessage}
+          </h4>
+          <button>
                 Shorten It!  
           </button>
         </StyledInputForm>
       </StyledInput>
-      {lists.length >0 ? (
-          lists.map((link, index) => (
-              <StyledLink key={index} >
-                  <h3 className='initial-link'>{link.originalLink}</h3>
-                  <div className='separator'></div>
+          {list.map((e, index) => (
+              <StyledLink key={e.id} >
+                  <h3 className='initial-link'>{e.longUrl}</h3>
                         <div className='link-button'>
                               <h3 className='new-link' id='generated-link'>
-                                  {link.shortLink}</h3>
-                                   <button onClick={copyClick} className={copied ? 'copied' : null}>
-              {copied ? 'Copied!' : 'Copy'}
+                                  {e.shortUrl}</h3>
+                                   <button
+                                   name={e.id}
+                                   className={e.copied ? 'copied' : null} 
+                                   onClick={() => {
+                                       navigator.clipboard.writeText(e.shortUrl);
+                                       const newList = [...list];
+                                       newList[index].copied = true;
+                                       setList(newList);
+                                       console.log(list);}}>
+               {e.copied ?'copied':'copy'}
             </button>
                         </div>
                     </StyledLink>
-                ))
-            ):null }
+                ))}
     </StyledContainer>
   )
 }
