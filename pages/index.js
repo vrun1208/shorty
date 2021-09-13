@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from "styled-components"
 //import { useForm } from 'react-hook-form';
-import HeaderSection from './mid';
-import Navbar from './navbar';
-import Footer from './footer';
-import Advance from './midTwo';
+import HeaderSection from '../component/Mid';
+import Navbar from '../component/Navbar';
+import Footer from '../component/Footer';
+import Advance from '../component/MidTwo';
 //import Nav from "./navbar";
 
 const StyledApp = styled.main`
