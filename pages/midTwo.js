@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Shorty from './short'
+import Shorty from './Short'
 
 const StyledAdvancedSection = styled.section`
   background-color: #f0f1f6;
