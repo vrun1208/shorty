@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Desktop from './Desktop'
-import Logo from './Logo'
-import Phone from './Phone'
-import HamIcon from './HamIcon'
+import Desktop from '../component/Desktop'
+import Logo from '../component/Logo'
+import Phone from '../component/Phone'
+import HamIcon from '../component/HamIcon'
 
 
 const StyledNav = styled.nav`
