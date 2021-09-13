@@ -5,7 +5,7 @@ import HeaderSection from './Mid';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Advance from './MidTwo';
-//import Nav from "./navbar";
+
 
 const StyledApp = styled.main`
   font-family: 'Poppins', sans-serif;
