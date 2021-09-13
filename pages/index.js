@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components"
 //import { useForm } from 'react-hook-form';
-import HeaderSection from '../component/Mid';
+import HeaderSection from './Mid';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import Advance from '../component/MidTwo';
