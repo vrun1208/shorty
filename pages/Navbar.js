@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import Desktop from '../component/Desktop'
 import Logo from '../component/Logo'
-import Phone from '../component/Phone'
+import Phone from '../component/phone'
 import HamIcon from '../component/HamIcon'
 
 
